@@ -22,6 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdlib.h>
+#include "rangetech_outputs.h"
+#include "corona_protocol.h"
 
 /* USER CODE END Includes */
 
@@ -93,6 +96,9 @@ int main(void)
   MX_TIM17_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  init_range_outputs();
+
+  HAL_TIM_Base_Start_IT(&htim17);
 
   /* USER CODE END 2 */
 
@@ -103,6 +109,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    update_flash_param();
   }
   /* USER CODE END 3 */
 }
@@ -288,6 +295,29 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+uint32_t rand_number(void){
+	return rand();
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	if(htim->Instance == TIM17) { 	// 10 ms
+		loop_outputs_10ms();
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart->Instance == USART1){
+		read_byte_it();
+	}
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart->Instance == USART1){
+		end_of_transmission_it();
+	}
+}
 
 /* USER CODE END 4 */
 
