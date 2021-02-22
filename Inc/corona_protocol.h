@@ -107,7 +107,7 @@ struct communication_states{
 extern TIM_HandleTypeDef htim17;
 
 #define START_FLASH_ADDRESS 		0x08000000
-#define FLASH_SIZE__				0x20000
+#define FLASH_SIZE__				0x8000
 #define GROUP_ADDRESS_OFFSET		0x10
 #define	DEVICE_ADDRESS_OFFSET		0x20
 
