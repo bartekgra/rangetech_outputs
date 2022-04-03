@@ -74,6 +74,7 @@ struct communication_states{
 	uint8_t number_of_lost_msg;
 	uint8_t timeout_transaction;
 	uint32_t baudrate;
+	uint8_t receive_it_flag;
 
 	uint8_t dist_info_flag;
 	uint8_t end_calib_flag;

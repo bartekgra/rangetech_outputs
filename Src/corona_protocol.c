@@ -104,7 +104,9 @@ void read_byte_it(void){
 	com_states.timeout_frame_cycle = 0;
 	buffer_rx[head_position_buffer_rx] = data_uart_rx;
 	if(++head_position_buffer_rx == BUFFER_RX_SIZE) head_position_buffer_rx = 0;
-	HAL_UART_Receive_IT(&UART_PERIPH, &data_uart_rx, 1);
+	if(HAL_UART_Receive_IT(&UART_PERIPH, &data_uart_rx, 1) == HAL_BUSY){
+		com_states.receive_it_flag = 1;
+	}
 }
 
 void end_of_transmission_it(void){
@@ -134,6 +136,12 @@ void communication_step_it(void){
 		receive();
 		retransmit_event();
 		update_unix_timestamp();
+
+		if(com_states.receive_it_flag){
+			if(HAL_UART_Receive_IT(&UART_PERIPH, &data_uart_rx, 1) == HAL_OK){
+				com_states.receive_it_flag = 0;
+			}
+		}
 	}
 }
 
