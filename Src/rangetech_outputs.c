@@ -20,15 +20,19 @@ void loop_outputs_10ms(void){
 	communication_step_it();
 	update_outputs();
 
-	if(main_state == _calib_communication){
+	switch(main_state){
+	case _calib_communication:
 		periode_led_state = PERIODE_CALIB_COM;
 		calib_communication();
-	}else if(main_state == _work){
+		break;
+	case _work:
 		periode_led_state = PERIODE_WORK;
 		work();
-	}else if(main_state == _error){
+		break;
+	case _error:
 		periode_led_state = PERIODE_ERROR;
 		error();
+		break;
 	}
 }
 
@@ -37,7 +41,9 @@ void calib_communication(void){
 	static uint8_t data_tmp[4] = {
 			0,0,0,0
 	};
-	if(calib_com_state == _calib_module_com){
+
+	switch(calib_com_state){
+	case _calib_module_com:
 		if(get_configured_flag() == 1){
 			data_tmp[0] = rand_number() % 0xFF;
 			data_tmp[1] = rand_number() % 0xFF;
@@ -45,7 +51,8 @@ void calib_communication(void){
 			data_tmp[3] = rand_number() % 0xFF;
 			calib_com_state = _request_for_set_id_address;
 		}
-	}else if(calib_com_state == _request_for_set_id_address){
+		break;
+	case _request_for_set_id_address:
 		if(get_device_address() == 0xFFFF){
 			if(++counter_tmp == ADDRESS_REQUEST_PERIOD){
 				counter_tmp = 0;
@@ -54,7 +61,8 @@ void calib_communication(void){
 		}else{
 			calib_com_state = _request_for_start_msg;
 		}
-	}else if(calib_com_state == _request_for_start_msg){
+		break;
+	case  _request_for_start_msg:
 		if(get_unix_timestamp() == 0){
 			if(++counter_tmp == START_REQUEST_PERIOD){
 				counter_tmp = 0;
@@ -64,6 +72,7 @@ void calib_communication(void){
 		}else{
 			main_state = _work;
 		}
+		break;
 	}
 }
 

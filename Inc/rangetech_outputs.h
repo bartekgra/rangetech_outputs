@@ -15,7 +15,6 @@
 
 enum main_states{
 	_calib_communication,
-	_calib_engines,
 	_work,
 	_error
 } main_state;
