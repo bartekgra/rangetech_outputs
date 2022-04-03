@@ -134,9 +134,6 @@ uint16_t head_position_buffer_response;
 const uint8_t new_line_character;
 const uint8_t carriage_return_character;
 const char* ok_config_response;
-static const char* config_lora_command[];
-static const char* config_fsk_command[];
-
 
 #define TIME_ACTIVE_LED			5
 
